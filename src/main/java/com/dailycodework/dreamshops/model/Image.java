@@ -1,8 +1,6 @@
 package com.dailycodework.dreamshops.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +14,12 @@ import java.sql.Blob;
 @NoArgsConstructor
 @Entity
 public class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String fileName;
     private String fileType;
+    @Lob
     private Blob image;
     private String downloadUrl;
 
