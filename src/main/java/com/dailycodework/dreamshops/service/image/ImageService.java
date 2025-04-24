@@ -38,10 +38,12 @@ public class ImageService implements IImageService{
     @Override
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
+
         List<ImageDto> savedImageDto = new ArrayList<>();
         for (MultipartFile file : files){
             try {
                 Image image = new Image();
+
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
