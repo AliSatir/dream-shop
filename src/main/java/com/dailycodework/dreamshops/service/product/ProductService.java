@@ -23,7 +23,8 @@ public class ProductService implements IProductService{
     public Product addProduct(AddProductRequest request) {
         Category category = Optional.of(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(()->{
-                    Category newCategory = new Category(request.getCategory().getName());
+                    Category newCategory = new Category();
+                    newCategory.setName(request.getCategory().getName());
                     return categoryRepository.save(newCategory);
                 });
         request.setCategory(category);
