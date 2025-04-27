@@ -1,13 +1,18 @@
 package com.dailycodework.dreamshops.service.product;
 
+import com.dailycodework.dreamshops.dto.ImageDto;
+import com.dailycodework.dreamshops.dto.ProductDto;
 import com.dailycodework.dreamshops.exceptions.ProductNotFoundException;
 import com.dailycodework.dreamshops.model.Category;
+import com.dailycodework.dreamshops.model.Image;
 import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.repository.CategoryRepository;
+import com.dailycodework.dreamshops.repository.ImageRepository;
 import com.dailycodework.dreamshops.repository.ProductRepository;
 import com.dailycodework.dreamshops.request.AddProductRequest;
 import com.dailycodework.dreamshops.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +21,17 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService{
+    private final ImageRepository imageRepository;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        Category category = Optional.of(categoryRepository.findByName(request.getCategory().getName()))
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(()->{
-                    Category newCategory = new Category();
-                    newCategory.setName(request.getCategory().getName());
+                    Category newCategory = new Category(request.getCategory().getName());
+                    //newCategory.setName(request.getCategory().getName());
                     return categoryRepository.save(newCategory);
                 });
         request.setCategory(category);
@@ -35,7 +42,7 @@ public class ProductService implements IProductService{
         return new Product(
                 request.getName(),
                 request.getBrand(),
-                request.getPricer(),
+                request.getPrice(),
                 request.getInventory(),
                 request.getDescription(),
                 category
@@ -66,7 +73,7 @@ public class ProductService implements IProductService{
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request){
         existingProduct.setName(request.getName());
         existingProduct.setBrand(request.getBrand());
-        existingProduct.setPricer(request.getPricer());
+        existingProduct.setPrice(request.getPricer());
         existingProduct.setInventory(request.getInventory());
         existingProduct.setDescription(request.getDescription());
 
@@ -110,4 +117,29 @@ public class ProductService implements IProductService{
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }
-}
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products){
+        return products.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product){
+        ProductDto productDto = modelMapper.map(product , ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+
+        productDto.setImages(imageDtos);
+        return productDto;
+
+    }
+
+
+
+
+
+}//class

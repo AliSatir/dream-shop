@@ -18,7 +18,7 @@ public class Product {
     private Long id;
     private String name;
     private String brand;
-    private BigDecimal pricer;
+    private BigDecimal price;
     private int inventory;
     private String description;
 
@@ -32,7 +32,7 @@ public class Product {
     public Product(String name, String brand, BigDecimal pricer, int inventory, String description, Category category) {
         this.name = name;
         this.brand = brand;
-        this.pricer = pricer;
+        this.price = pricer;
         this.inventory = inventory;
         this.description = description;
         this.category = category;

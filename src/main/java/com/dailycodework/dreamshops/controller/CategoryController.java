@@ -6,7 +6,6 @@ import com.dailycodework.dreamshops.model.Category;
 import com.dailycodework.dreamshops.respnse.ApiResponse;
 import com.dailycodework.dreamshops.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/${api.prefix}/categories")
+@RequestMapping("${api.prefix}/categories")
 public class CategoryController {
     private final ICategoryService categoryService;
 
