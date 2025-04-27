@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -35,6 +34,7 @@ public class Cart {
     public void removeItem(CartItem cartItem){
         this.cartItems.remove(cartItem);
         cartItem.setCart(null);
+        updateTotalAmount();
     }
 
     private void updateTotalAmount(){
