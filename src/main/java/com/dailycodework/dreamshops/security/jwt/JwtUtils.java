@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JwtUtils {
+public  class JwtUtils {
 
     @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
@@ -39,7 +39,7 @@ public class JwtUtils {
                 .signWith(key(), SignatureAlgorithm.HS256).compact();
     }
 
-    private Key key() {
+    private  Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
@@ -51,7 +51,7 @@ public class JwtUtils {
                 .getBody().getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public  boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key())

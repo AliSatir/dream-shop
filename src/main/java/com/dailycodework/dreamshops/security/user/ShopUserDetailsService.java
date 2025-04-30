@@ -22,3 +22,5 @@ public class ShopUserDetailsService implements UserDetailsService {
         return ShopUserDetails.buildUserDetails(user);
     }
 }
+
+
